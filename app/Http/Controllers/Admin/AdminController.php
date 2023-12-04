@@ -82,11 +82,11 @@ class AdminController extends Controller
 
     public function login(){
 
-//        if (!Auth::check()){
+        if (!Auth::check()){
             return view('admin.auth.login');
-//        }else{
-//            redirect();
-//        }
+        }else{
+            redirect();
+        }
     }
 
     public function authenticate(Request $request): RedirectResponse
@@ -109,7 +109,7 @@ class AdminController extends Controller
     }
 
     public function users(){
-        $users = User::query()->paginate(10);
+        $users = User::query()->latest()->orderBy('id','desc')->paginate(10);
 
 
         return view('admin.users.index', compact('users'));

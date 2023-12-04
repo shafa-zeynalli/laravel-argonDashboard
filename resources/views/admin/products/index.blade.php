@@ -12,6 +12,7 @@
 
 
 @section('content')
+
     <div class="text-white">
 
         <form action="{{route('admin.products.filter')}}" method="post">
@@ -36,8 +37,6 @@
         </form>
 
     </div>
-
-
 
 
     <div class="row">
@@ -66,7 +65,7 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  ">
                                     Price
                                 </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  ">
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                     Status
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
