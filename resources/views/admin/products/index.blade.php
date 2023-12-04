@@ -12,6 +12,7 @@
 
 
 @section('content')
+<<<<<<< HEAD
     <div class="text-white">
 
         <form action="{{route('admin.products.filter')}}" method="post">
@@ -40,6 +41,8 @@
 
 
 
+=======
+>>>>>>> c7dd101014c4ac8bf768fe0a6710e3a03993833d
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -55,6 +58,7 @@
                                     Id
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+<<<<<<< HEAD
                                     User Name
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -67,6 +71,20 @@
                                     Price
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7  ">
+=======
+                                    User
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    User Name
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Slug
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Price
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+>>>>>>> c7dd101014c4ac8bf768fe0a6710e3a03993833d
                                     Status
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
