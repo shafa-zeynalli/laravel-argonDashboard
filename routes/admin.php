@@ -10,9 +10,9 @@ Route::get('/login', [AdminController::class,'login'])->name('admin.login');
 Route::post('/login', [AdminController::class,'authenticate']);
 
 Route::get('/users', [AdminController::class,'users'])->name('admin.users');
-Route::post('/users', [AdminController::class,'filterUsers'])->name('admin.users.filter');
+//Route::post('/users', [AdminController::class,'filterUsers'])->name('admin.users.filter');
 
 Route::get('/products', [AdminController::class,'products'])->name('admin.products');
-Route::post('/products', [AdminController::class,'filterProducts'])->name('admin.products.filter');
+//Route::post('/products', [AdminController::class,'filterProducts'])->name('admin.products.filter');
 
 

@@ -15,22 +15,22 @@
 
     <div class="text-white">
 
-        <form action="{{route('admin.products.filter')}}" method="post">
-            @csrf
+        <form action="{{route('admin.products')}}" method="get">
+
             <label for="" class="text-white">User Name
-                <input type="text" name="user_name" class="form-control form-control-lg">
+                <input type="text" name="user_name" class="form-control form-control-lg" value="{{request()->get('user_name')}}">
             </label>
             <label for="" class="text-white">Product Name
-                <input type="text" name="product_name" class="form-control form-control-lg">
+                <input type="text" name="product_name" class="form-control form-control-lg" value="{{request()->get('product_name')}}">
             </label>
             <label for="" class="text-white">Slug
-                <input type="text" name="slug" class="form-control form-control-lg">
+                <input type="text" name="slug" class="form-control form-control-lg" value="{{request()->get('slug')}}">
             </label>
             <label for="" class="text-white">Status
-                <input type="text" name="status" class="form-control form-control-lg">
+                <input type="text" name="status" class="form-control form-control-lg" value="{{request()->get('status')}}">
             </label>
             <label for="" class="text-white">Price
-                <input type="text" name="price" class="form-control form-control-lg">
+                <input type="text" name="price" class="form-control form-control-lg" value="{{request()->get('price')}}">
             </label>
 
             <button type="submit" class="btn btn-success py-3 mx-2 mt-2">Search</button>
@@ -102,7 +102,7 @@
                             </tbody>
                         </table>
                         <div>
-                            {{ $products->links('pagination::bootstrap-5') }}
+                            {{ $products->appends(request()->all())->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

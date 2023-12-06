@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -84,9 +85,9 @@ class AdminController extends Controller
 
         if (!Auth::check()){
             return view('admin.auth.login');
-        }else{
-            redirect();
         }
+        return redirect();
+
     }
 
     public function authenticate(Request $request): RedirectResponse
@@ -108,39 +109,92 @@ class AdminController extends Controller
         ])->onlyInput('email');
     }
 
-    public function users(){
-        $users = User::query()->latest()->orderBy('id','desc')->paginate(10);
+    public function users(Request $request){
+//        $users = User::query()->latest()->orderBy('id','desc')->paginate(10);
 
+        $userQuery = User::query();
 
+        if ($request->filled('name')) {
+            $userQuery->where('name', 'like', "%".$request->get('name')."%");
+        }
+
+        if ($request->filled('email')) {
+            $userQuery->where('email', 'like', "%".$request->get('email')."%");
+        }
+
+        if ($request->filled('startDate')) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $request->get('startDate'));
+//            dd($startDate);
+            $userQuery->where('created_at', '>=',  $startDate);
+        }
+        if ($request->filled('endDate')) {
+//            dd($request->get('endDate'));
+            $endDate = Carbon::createFromFormat('Y-m-d', $request->get('endDate'))->setTimezone('Asia/Baku');
+//            $endDate->setTimezone('Asia/Baku');
+//            $endDate->subDay();
+//            dd($endDate);
+            $userQuery->where('created_at', '<=', $endDate);
+        }
+
+        $users = $userQuery->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
-    public function products(){
-        $products = Product::query()->with('user')->paginate(10);
-//        dd($products);
+    public function products(Request $request){
+//        $products = Product::query()->with('user')->paginate(10);
+        $productQuery = Product::query();
+
+        if ($request->filled('product_name')) {
+            $productQuery->where('name', 'like', "%".$request->get('product_name')."%");
+        }
+        if ($request->filled('user_name')) {
+//            $productQuery->where('name', 'like', "%".$request->get('pName')."%");
+            $productQuery->whereHas('user', function ($query) use ($request) {
+                $query->where('name', 'like', "%".$request->get('user_name')."%");
+            });
+//            dd($productQuery);
+        }
+        if ($request->filled('slug')) {
+            $productQuery->where('slug', 'like', "%".$request->get('slug')."%");
+        }
+        if ($request->filled('price')) {
+            $productQuery->where('price', $request->get('price'));
+        }
+        if ($request->filled('status')) {
+            $productQuery->where('status', 'like', "%".$request->get('status')."%");
+        }
+        if ($request->filled('startDate')) {
+            $startDate = Carbon::createFromFormat('Y-m-d', $request->get('startDate'));
+            $productQuery->where('created_at', '>=',  $startDate);
+        }
+        if ($request->filled('endDate')) {
+            $endDate = Carbon::createFromFormat('Y-m-d', $request->get('endDate'))->setTimezone('Asia/Baku');
+            $productQuery->where('created_at', '<=', $endDate);
+        }
+        $products = $productQuery->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
 
-    public function filterUsers(Request $request)
-    {
-        $name = $request->input('name');
-        $email = $request->input('email');
-
-        $userQuery = User::query();
-
-        if ($name) {
-            $userQuery->where('name', 'like', "%$name%");
-        }
-
-        if ($email) {
-            $userQuery->where('email', 'like', "%$email%");
-        }
-
-        $users = $userQuery->paginate(10);
-
-        return view('admin.users.index', compact('users'));
-    }
+//    public function filterUsers(Request $request)
+//    {
+//        $name = $request->input('name');
+//        $email = $request->input('email');
+//
+//        $userQuery = User::query();
+//
+//        if ($name) {
+//            $userQuery->where('name', 'like', "%$name%");
+//        }
+//
+//        if ($email) {
+//            $userQuery->where('email', 'like', "%$email%");
+//        }
+//
+//        $users = $userQuery->paginate(10);
+//
+//        return view('admin.users.index', compact('users'));
+//    }
 
     public function filterProducts(Request $request)
     {

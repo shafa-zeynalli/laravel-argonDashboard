@@ -17,13 +17,19 @@
 
         <div class="text-white">
 
-            <form action="{{route('admin.users.filter')}}" method="post">
-                @csrf
+            <form action="{{route('admin.users')}}" method="get">
                 <label for="" class="text-white">Name
-                    <input type="text" name="name" class="form-control form-control-lg">
+                    <input type="text" name="name" class="form-control form-control-lg" value="{{request()->get('name')}}"
+                           placeholder="Name">
                 </label>
                 <label for="" class="text-white">Email
-                    <input type="email" name="email" class="form-control form-control-lg">
+                    <input type="text" name="email" class="form-control form-control-lg" value="{{request()->get('email')}}" placeholder="Email">
+                </label>
+                <label for="" class="text-white">Start Date
+                    <input type="date" name="startDate" class="form-control form-control-lg" value="{{request()->get('startDate')}}" placeholder="Start Date">
+                </label>
+                <label for="" class="text-white">End Date
+                    <input type="date" name="endDate" class="form-control form-control-lg"  value="{{request()->get('endDate')}}" placeholder="End Date">
                 </label>
 
                 <button type="submit" class="btn btn-success py-3 mx-2 mt-2">Search</button>
@@ -72,7 +78,7 @@
                                 </tbody>
                             </table>
                             <div>
-                                {{ $users->links('pagination::bootstrap-5') }}
+                                {{ $users->appends(request()->all())->links('pagination::bootstrap-5') }}
                             </div>
                         </div>
                     </div>
