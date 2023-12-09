@@ -32,7 +32,12 @@
             <label for="" class="text-white">Price
                 <input type="text" name="price" class="form-control form-control-lg" value="{{request()->get('price')}}">
             </label>
-
+            <label for="" class="text-white">Start Date
+                <input type="date" name="startDate" class="form-control form-control-lg" value="{{request()->get('startDate')}}" placeholder="Start Date">
+            </label>
+            <label for="" class="text-white">End Date
+                <input type="date" name="endDate" class="form-control form-control-lg"  value="{{request()->get('endDate')}}" placeholder="End Date">
+            </label>
             <button type="submit" class="btn btn-success py-3 mx-2 mt-2">Search</button>
         </form>
 

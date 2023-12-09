@@ -17,12 +17,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-//        if (Auth::check()){
+        if (Auth::check()){
 //            dd('yes');
-//        }
-//        Auth::logout();
-
-       return view('admin.dashboard');
+            Auth::logout();
+            return view('admin.dashboard');
+        }
+        Auth::logout();
+//       return view('admin.auth.login');
+        return redirect()->route('admin.login');
     }
 
     public function tables()
@@ -86,7 +88,7 @@ class AdminController extends Controller
         if (!Auth::check()){
             return view('admin.auth.login');
         }
-        return redirect();
+        return redirect()->route('admin.dashboard');
 
     }
 
@@ -142,7 +144,7 @@ class AdminController extends Controller
 
     public function products(Request $request){
 //        $products = Product::query()->with('user')->paginate(10);
-        $productQuery = Product::query();
+        $productQuery = Product::query()->with('user');
 
         if ($request->filled('product_name')) {
             $productQuery->where('name', 'like', "%".$request->get('product_name')."%");
@@ -165,11 +167,12 @@ class AdminController extends Controller
         }
         if ($request->filled('startDate')) {
             $startDate = Carbon::createFromFormat('Y-m-d', $request->get('startDate'));
-            $productQuery->where('created_at', '>=',  $startDate);
+            $productQuery->where('created_at', '>=',  $startDate->startOfDay());
         }
         if ($request->filled('endDate')) {
-            $endDate = Carbon::createFromFormat('Y-m-d', $request->get('endDate'))->setTimezone('Asia/Baku');
-            $productQuery->where('created_at', '<=', $endDate);
+            $endDate = Carbon::createFromFormat('Y-m-d', $request->get('endDate'));
+            $productQuery->where('created_at', '<=', $endDate->endOfDay());
+//            dd($productQuery);
         }
         $products = $productQuery->paginate(10);
         return view('admin.products.index', compact('products'));
@@ -196,40 +199,40 @@ class AdminController extends Controller
 //        return view('admin.users.index', compact('users'));
 //    }
 
-    public function filterProducts(Request $request)
-    {
-        $uName = $request->input('user_name');
-        $pName = $request->input('product_name');
-        $slug = $request->input('slug');
-        $price = $request->input('price');
-        $status = $request->input('status');
-
-        $productQuery = Product::query();
-
-        if ($uName) {
-            // 'user' Relationships ile elaqe qurub filtrleme
-            $productQuery->whereHas('user', function ($query) use ($uName) {
-                $query->where('name', 'like', "%$uName%");
-            });
-        }
-
-
-        if ($pName) {
-            $productQuery->where('name', 'like', "%$pName%");
-        }
-        if ($slug) {
-            $productQuery->where('slug', 'like', "%$slug%");
-        }
-        if ($status) {
-            $productQuery->where('status', 'like', "%$status%");
-        }
-        if ($price) {
-            $productQuery->where('price',  "$price");
-        }
-
-        $products = $productQuery->paginate(10);
-
-        return view('admin.products.index', compact('products'));
-    }
+//    public function filterProducts(Request $request)
+//    {
+//        $uName = $request->input('user_name');
+//        $pName = $request->input('product_name');
+//        $slug = $request->input('slug');
+//        $price = $request->input('price');
+//        $status = $request->input('status');
+//
+//        $productQuery = Product::query();
+//
+//        if ($uName) {
+//            // 'user' Relationships ile elaqe qurub filtrleme
+//            $productQuery->whereHas('user', function ($query) use ($uName) {
+//                $query->where('name', 'like', "%$uName%");
+//            });
+//        }
+//
+//
+//        if ($pName) {
+//            $productQuery->where('name', 'like', "%$pName%");
+//        }
+//        if ($slug) {
+//            $productQuery->where('slug', 'like', "%$slug%");
+//        }
+//        if ($status) {
+//            $productQuery->where('status', 'like', "%$status%");
+//        }
+//        if ($price) {
+//            $productQuery->where('price',  "$price");
+//        }
+//
+//        $products = $productQuery->paginate(10);
+//
+//        return view('admin.products.index', compact('products'));
+//    }
 
 }
