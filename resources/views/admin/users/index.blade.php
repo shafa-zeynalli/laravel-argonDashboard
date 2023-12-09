@@ -17,7 +17,7 @@
 
         <div class="text-white">
 
-            <form action="{{route('admin.users')}}" method="get">
+            <form action="{{route('admin.users')}}" method="get" class="d-flex">
                 <label for="" class="text-white">Name
                     <input type="text" name="name" class="form-control form-control-lg" value="{{request()->get('name')}}"
                            placeholder="Name">
@@ -32,9 +32,15 @@
                     <input type="date" name="endDate" class="form-control form-control-lg"  value="{{request()->get('endDate')}}" placeholder="End Date">
                 </label>
 
-                <button type="submit" class="btn btn-success py-3 mx-2 mt-2">Search</button>
+                <label class="text-white">Select Page Size
+                    <select class="form-select width-20 height-60" name="pageSize">
+                        @foreach([10, 25, 50, 100] as $value)
+                            <option {{ request()->get('pageSize') == $value ? 'selected' : '' }} value="{{$value}}">{{$value}}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <button type="submit" class="btn btn-success btn-sm  btn-outline-success mx-2 mt-3">Search</button>
             </form>
-
         </div>
 
         <div class="row">

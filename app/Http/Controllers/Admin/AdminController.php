@@ -138,7 +138,9 @@ class AdminController extends Controller
             $userQuery->where('created_at', '<=', $endDate);
         }
 
-        $users = $userQuery->paginate(10);
+
+        $users = $userQuery->paginate($request->get('pageSize') ?? 10);
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -174,7 +176,7 @@ class AdminController extends Controller
             $productQuery->where('created_at', '<=', $endDate->endOfDay());
 //            dd($productQuery);
         }
-        $products = $productQuery->paginate(10);
+        $products = $productQuery->paginate($request->get('pageSize') ?? 10);
         return view('admin.products.index', compact('products'));
     }
 
