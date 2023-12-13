@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -17,14 +20,38 @@ class AdminController extends Controller
      */
     public function index()
     {
-        if (Auth::check()){
-//            dd('yes');
+
+            $users = User::all(); // hamisini getirir
+            $users = User::all()->toArray(); // array veziyyetine cevirir
+
+            $coll = collect($users);
+
+//          $collection = $coll->all();    //  hamisini getirir
+//          $collection = $coll->avg('id'); // idye gore ortalayir idnin reqemini yazir ex: 4
+
+//          $collection = $coll->contains(function ($user) {
+//              return $user['id'] > 54;      //idsi 54den boyuk 1 dene bele data varsa true gonderecek , hec yoxdusa false olacaq
+//          });
+
+//            $collection=$coll->count();  //tabledeki item larin sayini gosterir
+
+//            $collection=$coll->filter(function ($value) {
+//                return $value['id'] > 98;
+//            })->all();;  //tabledeki  idsi 98 den boyuk olan butun item larin gosterir
+
+            $collection=$coll->first(function ($value) {
+                return $value['id'] > 98;
+            });;  //tabledeki  idsi 98 den boyuk olan ilk item i gosterir  ancaq 99 un melumatlarini getirir
+
+
+//            echo $collection;
+            dd($collection);
+
+
+
+
             Auth::logout();
             return view('admin.dashboard');
-        }
-        Auth::logout();
-//       return view('admin.auth.login');
-        return redirect()->route('admin.login');
     }
 
     public function tables()
@@ -85,12 +112,45 @@ class AdminController extends Controller
 
     public function login(){
 
-        if (!Auth::check()){
+//        if (!Auth::check()){
             return view('admin.auth.login');
-        }
-        return redirect()->route('admin.dashboard');
+//        }
+//        return redirect()->route('admin.dashboard');
 
     }
+    public function profile(){
+        $user = Auth::user();
+//        dd($user);
+        return view('admin.users.profile', compact('user'));
+    }
+
+    public function updateProfile(ProfileUpdateRequest $request){
+//        $image = $request->imageFile->move(public_path('uploads'),'xxx.jpg');
+
+//        $file=$request->file('imageFile');
+//        $file->store('uploads');  // oz adi ile getirir
+
+        $user = User::find(auth()->user()->id);
+//        dd($user);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        if ($user->image) {
+            Storage::delete($user->image);
+        }
+
+        $fileName = $request->file('imageFile')->store('uploads');
+        $user->image = $fileName;
+        $user->save();
+
+//        $users = Storage::url($user->image);
+//        dd($users);
+        return view('admin.users.profile', compact('user'));
+    }
+
+
+
+
 
     public function authenticate(Request $request): RedirectResponse
     {
@@ -236,5 +296,12 @@ class AdminController extends Controller
 //
 //        return view('admin.products.index', compact('products'));
 //    }
+
+
+    static function test(){
+        Artisan::call(' send:emails userss12345');
+        // terminalda php artisan tinker edib daha sonra 'App\Http\Controllers\Admin\AdminController::test()' bunu yaziriq
+
+    }
 
 }

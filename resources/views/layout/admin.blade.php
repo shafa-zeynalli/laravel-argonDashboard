@@ -9,7 +9,9 @@
 @include('admin.partials.sidebar')
 <main class="main-content position-relative border-radius-lg ">
     <!-- Navbar -->
-    @include('admin.partials.header')
+{{--    @include('admin.partials.header')--}}
+    @yield('header')
+    @yield('card')
     <!-- End Navbar -->
     <div class="container-fluid py-4">
         @yield('content')

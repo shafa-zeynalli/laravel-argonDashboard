@@ -11,7 +11,9 @@
     </nav>
 @endsection
 
-
+@section('header')
+    @include('admin.partials.header')
+@endsection
 
     @section('content')
 

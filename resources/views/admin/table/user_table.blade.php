@@ -8,6 +8,9 @@
         <h6 class="font-weight-bolder text-white mb-0">Tables</h6>
     </nav>
 @endsection
+@section('header')
+    @include('admin.partials.header')
+@endsection
 @section('content')
 
 {{--    {{$users}}--}}
